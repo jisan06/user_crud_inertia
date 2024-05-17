@@ -4,6 +4,7 @@ import {Head, Link, router, useForm, usePage} from '@inertiajs/vue3';
 import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { ref } from 'vue';
 
 const form = useForm({
     prefixname: '',
@@ -19,16 +20,15 @@ const form = useForm({
 
 const prefixTitles = ['Mr', 'Mrs', 'Ms']
 
-let previewImage = '';
+const previewImage = ref('');
 const selectImage = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = () => {
-            previewImage = reader.result;
+            previewImage.value = reader.result;
             form.photo = file;
         };
-        console.log(previewImage);
         reader.readAsDataURL(file);
     }
 }
@@ -155,7 +155,7 @@ const formSubmit = () => {
                                     class="mt-1 block w-full"
                                     @change="selectImage($event)"
                                 />
-                                <img :src="previewImage" class="item-image" v-if="previewImage != ''" alt="">
+                                <img :src="previewImage" class="item-image" v-if="previewImage" alt="">
 
                                 <InputError class="mt-2" :message="form.errors.photo" />
                             </div>

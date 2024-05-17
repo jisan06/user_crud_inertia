@@ -4,6 +4,7 @@ import {Head, Link, useForm, usePage, router} from '@inertiajs/vue3';
 import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {ref} from "vue";
 const user= usePage().props.user;
 const form = useForm({
     prefixname: user.prefixname,
@@ -20,13 +21,13 @@ const form = useForm({
 
 const prefixTitles = ['Mr', 'Mrs', 'Ms']
 
-let previewImage = user.avatar ? user.avatar : '';
+const previewImage = ref(user.avatar ? user.avatar : '');
 const selectImage = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = () => {
-            previewImage = reader.result;
+            previewImage.value = reader.result;
             form.photo = file;
         };
         reader.readAsDataURL(file);
