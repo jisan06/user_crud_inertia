@@ -1,4 +1,5 @@
 # Installation Instruction
+The Project made by Laravel 11 and inertia js with vue js
 1. After clone composer install
 2. cp .env.example .env
 3. php artisan key:generate and fill up database information

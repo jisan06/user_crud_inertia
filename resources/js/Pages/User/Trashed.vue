@@ -53,16 +53,20 @@ const deleteUser = async (id) => {
                         </div>
                         <div>
                             <h3>Trash Users</h3>
-                            <table class="user-table text-center w-full">
+                            <table class="text-center w-full" v-if="users.length">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>User Name</th>
+                                    <th>Email</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="user in users">
-                                    <td>{{user.firstname}}</td>
+                                    <td>{{user.fullname}}</td>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.email}}</td>
                                     <td class="w-[30%]">
                                         <div class="flex gap-1 justify-center">
                                             <form @submit.prevent="form.patch(route('users.restore', user.id))" >
@@ -83,6 +87,9 @@ const deleteUser = async (id) => {
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="text-center" v-if="!users.length">
+                                There is no trashed user
+                            </div>
                         </div>
                     </div>
                 </div>

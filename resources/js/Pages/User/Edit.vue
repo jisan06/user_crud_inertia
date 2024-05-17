@@ -49,7 +49,7 @@ const formSubmit = () => {
                             <div class="3/10">
                                 <InputLabel for="prefixname" value="Title" />
 
-                                <select name="prefixname" :value="form.prefixname" id="prefixname" class="w-full">
+                                <select v-model="form.prefixname" :value="form.prefixname" id="prefixname" class="w-full">
                                     <option value="">Select Prefix</option>
                                     <option :value="prefix" v-for="prefix in prefixTitles">{{ prefix }}</option>
                                 </select>

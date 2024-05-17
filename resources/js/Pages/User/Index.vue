@@ -52,7 +52,7 @@ const deleteUser = async (id) => {
                         </div>
                         <div>
                             <h3>Active Users</h3>
-                            <table class="user-table text-center w-full">
+                            <table class="text-center w-full" v-if="users.length">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
@@ -92,6 +92,9 @@ const deleteUser = async (id) => {
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="text-center" v-if="!users.length">
+                                There is active user
+                            </div>
                         </div>
                     </div>
                 </div>

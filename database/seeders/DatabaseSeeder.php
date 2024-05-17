@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'prefixname' => fake()->name(),
+            'prefixname' => fake()->randomElement(['Mr', 'Mrs', 'Ms']),
             'firstname' => fake()->name(),
             'middlename' => fake()->name(),
             'lastname' => fake()->name(),

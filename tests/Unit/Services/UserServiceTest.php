@@ -33,7 +33,7 @@ class UserServiceTest extends TestCase
     public function it_can_store_a_user_to_database()
     {
         $attribute = [
-            'prefixname' => fake()->name(),
+            'prefixname' => fake()->randomElement(['Mr', 'Mrs', 'Ms']),
             'firstname' => fake()->name(),
             'middlename' => fake()->name(),
             'lastname' => fake()->name(),

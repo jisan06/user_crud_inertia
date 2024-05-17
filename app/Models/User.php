@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Events\UserSaved;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +20,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $guarded = ['id'];
+
+    protected $dispatchesEvents = [
+        'saved' => UserSaved::class,
+    ];
 
     protected $appends = ['fullname', 'avatar', 'middleinitial'];
 
@@ -71,7 +76,12 @@ class User extends Authenticatable
     protected function middleinitial(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->middlename,
+            get: fn () => substr($this->middlename, 0, 1),
         );
+    }
+
+    public function details()
+    {
+        return $this->hasMany(Detail::class);
     }
 }

@@ -4,9 +4,11 @@
 namespace App\Services;
 
 
+use App\Models\Detail;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 
 class UserService implements UserServiceInterface
 {
@@ -35,13 +37,18 @@ class UserService implements UserServiceInterface
 
     public function update(int $id, array $attribute)
     {
+        $user = User::findOrFail($id);
         if( !empty($attribute['photo']) ) {
             $attribute['photo'] = $this->upload($attribute['photo']);
+            if( $user->photo && file_exists(public_path('/storage/'.$user->photo)) ) {
+                Storage::disk('public')->delete($user->photo);
+            }
+        }else {
+            unset($attribute['photo']);
         }
         if( empty($attribute['password']) ) {
             unset($attribute['password']);
         }
-        $user = User::findOrFail($id);
         return $user->update($attribute);
     }
 
@@ -76,5 +83,38 @@ class UserService implements UserServiceInterface
     {
         $path = $file->store('images', 'public');
         return $path;
+    }
+
+    public function saveDetails(User $user)
+    {
+        $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
+        $middleInitial = substr($user->middlename, 0, 1);
+
+        $userDetails = [
+            ['key' => 'full_name', 'value' => $fullName],
+            ['key' => 'middle_initial', 'value' => $middleInitial],
+            ['key' => 'avatar', 'value' => $user->photo],
+            ['key' => 'gender', 'value' => $this->getGender($user->prefixname)],
+        ];
+
+        foreach ($userDetails as $detail) {
+            Detail::updateOrCreate(
+                ['key' => $detail['key'], 'user_id' => $user->id],
+                ['value' => $detail['value'], 'type' => 'details']
+            );
+        }
+    }
+
+    protected function getGender($prefixName)
+    {
+        switch ($prefixName) {
+            case 'Mr':
+                return 'Male';
+            case 'Mrs':
+            case 'Ms':
+                return 'Female';
+            default:
+                return 'Unknown'; // Handle unknown prefixes
+        }
     }
 }

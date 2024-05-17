@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 
 interface UserServiceInterface
@@ -23,4 +24,7 @@ interface UserServiceInterface
     public function delete(int $id);
 
     public function upload(UploadedFile $file);
+
+    public function saveDetails(User $user);
+
 }
